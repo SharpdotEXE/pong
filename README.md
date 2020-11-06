@@ -1,6 +1,6 @@
 # pong
 
-pygame needs to be installed in order to run this. the command is: python -m pip install -U pygame --user
+pygame needs to be installed in order to run this. the command for windows is: python -m pip install -U pygame --user
 
 pong.py is the current mostly working version. needs a few things such as better presentation of score 
 
