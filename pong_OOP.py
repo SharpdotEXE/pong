@@ -106,8 +106,3 @@ while running:
 			running = False
 
 	pygame.display.update()
-
-	print(leftpaddle_y)
-	
-	#print(leftpaddle.hitbox)
-	
