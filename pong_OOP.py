@@ -4,10 +4,10 @@ import random
 
 class paddle:
 	
-	def __init__(self, x, y, hitbox, speed, top_boundary, bottom_boundary, picture):
+	def __init__(self, x, y, speed, top_boundary, bottom_boundary, picture):
 		self.x = x
 		self.y = y
-		self.hitbox = hitbox
+		
 		self.speed = speed
 		self.top_boundary = top_boundary
 		self.bottom_boundary = bottom_boundary
@@ -38,10 +38,10 @@ class paddle:
 
 class Ball:
 
-	def __init__(self, x, y, hitbox, x_speed, y_speed, image):
+	def __init__(self, x, y, x_speed, y_speed, picture):
 		self.x = x
 		self.y = y
-		self.hitbox = hitbox
+		
 		self.x_speed = x_speed
 		self.y_speed = y_speed
 
@@ -62,11 +62,11 @@ paddle_pixel_size = 64
 
 leftpaddle_x, leftpaddle_y, leftpaddle_speed, top_boundary, bottom_boundary, leftpaddle_picture = 30, 250, .225, 0, 536, 'paddle.png'
 
-leftpaddle = paddle(leftpaddle_x, leftpaddle_y, leftpaddle_speed, top_boundary, bottom_boundary, leftpaddle_picture, leftpaddle_picture)
+leftpaddle = paddle(leftpaddle_x, leftpaddle_y, leftpaddle_speed, top_boundary, bottom_boundary, leftpaddle_picture)
 
 rightpaddle_x, rightpaddle_y, rightpaddle_speed, top_boundary, bottom_boundary, rightpaddle_picture = 705, 250, .225, 0, 536, 'paddle.png'
 
-rightpaddle = paddle(rightpaddle_x, rightpaddle_y, rightpaddle_speed, top_boundary, bottom_boundary, rightpaddle_picture, rightpaddle_picture)
+rightpaddle = paddle(rightpaddle_x, rightpaddle_y, rightpaddle_speed, top_boundary, bottom_boundary, rightpaddle_picture)
 
 
 
@@ -107,5 +107,7 @@ while running:
 
 	pygame.display.update()
 
+	print(leftpaddle_y)
+	
 	#print(leftpaddle.hitbox)
 	
