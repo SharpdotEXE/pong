@@ -20,28 +20,25 @@ class paddle:
 
 
 	def check_boundary(self):
-		if self.y < top_boundary:
-			self.y = top_boundary
-		if self.y > bottom_boundary:
-			self.y = bottom_boundary
+		if self.y < self.top_boundary:
+			self.y = self.top_boundary
+		if self.y > self.bottom_boundary:
+			self.y = self.bottom_boundary
 
 
 	def moveup(self):
 		self.y -= self.speed
-		#self.hitbox = [i for i in range(round(self.y), round(self.y) + paddle_pixel_size)]
 
 	def movedown(self):
 		self.y += self.speed
-		#self.hitbox = [i for i in range(round(self.y), round(self.y) + paddle_pixel_size)]
-
-
+		
 
 class Ball:
 
-	def __init__(self, x, y, x_speed, y_speed, picture):
+	def __init__(self, x, y, max_speed, x_speed, y_speed, picture):
 		self.x = x
 		self.y = y
-		
+		self.max_speed = max_speed
 		self.x_speed = x_speed
 		self.y_speed = y_speed
 
@@ -58,16 +55,21 @@ screen = pygame.display.set_mode((width, height))
 
 color = (50, 164, 168)
 
-paddle_pixel_size = 64
+leftpaddle_x = 30
+leftpaddle_y = 250
+leftpaddle_speed = .225
+left_top_boundary = 0
+left_bottom_boundary = 536
+leftpaddle_picture = 'paddle.png'
+leftpaddle = paddle(leftpaddle_x, leftpaddle_y, leftpaddle_speed, left_top_boundary, left_bottom_boundary, leftpaddle_picture)
 
-leftpaddle_x, leftpaddle_y, leftpaddle_speed, top_boundary, bottom_boundary, leftpaddle_picture = 30, 250, .225, 0, 536, 'paddle.png'
-
-leftpaddle = paddle(leftpaddle_x, leftpaddle_y, leftpaddle_speed, top_boundary, bottom_boundary, leftpaddle_picture)
-
-rightpaddle_x, rightpaddle_y, rightpaddle_speed, top_boundary, bottom_boundary, rightpaddle_picture = 705, 250, .225, 0, 536, 'paddle.png'
-
-rightpaddle = paddle(rightpaddle_x, rightpaddle_y, rightpaddle_speed, top_boundary, bottom_boundary, rightpaddle_picture)
-
+rightpaddle_x = 705
+rightpaddle_y = 250
+rightpaddle_speed = .225
+right_top_boundary = 0
+right_bottom_boundary = 536
+rightpaddle_picture = 'paddle.png'
+rightpaddle = paddle(rightpaddle_x, rightpaddle_y, rightpaddle_speed, right_top_boundary, right_bottom_boundary, rightpaddle_picture)
 
 
 pygame.init()
@@ -76,7 +78,7 @@ running = True
 while running:
 
 	
-	screen.fill((color))
+	screen.fill(color)
 
 	leftpaddle.load_picture()
 	rightpaddle.load_picture()
