@@ -1,238 +1,125 @@
 import pygame
 import random
 
-#initializes the game
-pygame.init()
 
-width, height = 800, 600 #display width, height
-x, y = 30, 250 #left paddle starting coordinates
-a, b = 705, 250 #right paddle starting coordinates
-p, q = 400, 268 #ball starting coordinates
-y_speed = .225 #left paddle speed
-b_speed = .225 #right paddle speed
-ball_x_speed = .125 #ball horizontal speed    #These must add up to max_speed
-ball_y_speed = .125 #ball vertical speed 	  #these must add up to max_speed
-max_speed = .25 #combined x and y ball speed
-white = (255, 255, 255) #test rect color
-multiplier = .5
+class paddle:
+	
+	def __init__(self, x, y, speed, top_boundary, bottom_boundary, picture):
+		self.x = x
+		self.y = y
+		self.speed = speed
+		self.top_boundary = top_boundary
+		self.bottom_boundary = bottom_boundary
+		self.picture = picture
+		
 
-ls = [i * .001 for i in range(1, 250)] #sets up  variable x and y speeds 
-
+	def load_picture(self):
+		
+		screen.blit(pygame.image.load(self.picture), (self.x, self.y))
 
 
+	def check_boundary(self):
+		if self.y < self.top_boundary:
+			self.y = self.top_boundary
+		if self.y > self.bottom_boundary:
+			self.y = self.bottom_boundary
 
-#creates display
+
+	def moveup(self):
+		self.y -= self.speed
+
+	def movedown(self):
+		self.y += self.speed
+		
+
+class Ball:
+
+	def __init__(self, x, y, max_speed, x_speed, y_speed, top_boundary, bottom_boundary, left_boundary, right_boundary, picture):
+		self.x = x
+		self.y = y
+		self.max_speed = max_speed
+		self.x_speed = x_speed
+		self.y_speed = y_speed
+		self.top_boundary = top_boundary
+		self.bottom_boundary = bottom_boundary
+		self.left_boundary = left_boundary
+		self.right_boundary = right_boundary
+		self.picture = picture
+
+
+	def load_picture(self):
+		screen.blit(pygame.image.load(self.picture), (self.x, self.y))
+
+	def move(self):
+		self.x += self.x_speed
+		self.y += self.y_speed
+
+
+	def check_boundary(self):
+		if self.y < self.top_boundary:
+			self.y_speed *= -1
+		if self.y > self.bottom_boundary:
+			self.y_speed *= -1
+
+		if self.x < self.left_boundary:
+			self.x_speed *= -1
+		if self.x > self.right_boundary:
+			self.x_speed *= -1
+			
+
+def check_keys_pressed():
+
+	keys = pygame.key.get_pressed()
+	
+	if keys[pygame.K_w]:
+		leftpaddle.moveup()
+	if keys[pygame.K_s]:
+		leftpaddle.movedown()
+		
+	if keys[pygame.K_UP]:
+		rightpaddle.moveup()
+	if keys[pygame.K_DOWN]:
+		rightpaddle.movedown()
+
+
+width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 
-#loads images
-left_paddle = pygame.image.load('paddle.png')
-right_paddle = pygame.image.load('paddle.png')
-ball = pygame.image.load('pongball.png')
+color = (50, 164, 168)
 
-clock = pygame.time.Clock()
+ball_max_speed = .250
+ball_x_speed = random.choice([.01, .02, .03, .04, .05, .06, .07, .08, .09, .1, .11, .12, .13, .14, .15, .16, .17, .18, .19, .2, .21, .22, .23, .24])
+ball_y_speed = ball_max_speed - ball_x_speed
+ball_x_speed *= random.choice([-1, 1]) 
+ball_y_speed *= random.choice([-1, 1])
 
-
-#creates paddles and ball
-def leftpaddle(x,y):
-	screen.blit(left_paddle, (x, y))
-
-	global lp_hitbox
-	lp_hitbox = [i for i in range(round(y), round(y) + 64)]
-	
-
-def rightpaddle(a, b):
-	screen.blit(right_paddle, (a, b))
-
-	global rp_hitbox
-	rp_hitbox = [i for i in range(round(b), round(b) + 64)]
-	
-
-def pongball(p, q):
-	screen.blit(ball, (p, q))
-
-	global ball_hitbox
-	ball_hitbox = [i for i in range(round(q), round(q) + 32)]
-	
+ball = Ball(400, 268, .25, ball_x_speed, ball_y_speed, 0, 568, 0, 768, 'pongball.png')
+leftpaddle = paddle(30, 250, .225, 0, 536, 'paddle.png')
+rightpaddle = paddle(705, 250, .225, 0, 536, 'paddle.png')
 
 
-#begins game loop
+pygame.init()
+
 running = True
 while running:
+
 	
-	#sets background color
-	screen.fill((50, 164, 168))
+	screen.fill(color)
 
-	#puts all 3 images on screen at abstract coordinates ()
-	leftpaddle(x, y)
-	rightpaddle(a, b)
-	pongball(p, q)
+	leftpaddle.load_picture()
+	rightpaddle.load_picture()
+	ball.load_picture()
 
-	#hitbox stuff 
-	#pygame.draw.rect(screen, white, (50,150,25,75))
-
-	#initial ball movement
-	p += ball_x_speed
-	q += ball_y_speed
+	ball.move()
 	
-	#currently used for being able to exit the game
+	check_keys_pressed()
+
+	ball.check_boundary()
+	leftpaddle.check_boundary()
+	rightpaddle.check_boundary()
+	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
-		#print(event) for debugging purposes mostly
-
-		
-		
-	#sets a variable to the currently pressed key
-	keys = pygame.key.get_pressed()
-	
-	#left paddle
-	if keys[pygame.K_w]:
-		y -= y_speed
-	if keys[pygame.K_s]:
-		y += y_speed
-
-	#right paddle
-	if keys[pygame.K_UP]:
-		b -= b_speed
-	if keys[pygame.K_DOWN]:
-		b += b_speed
-
-
-	#reset the game
-	if keys[pygame.K_SPACE]:
-		p = 400 #resets the ball at the middle
-		q = 268
-		
-		x, y = 30, 250 #resets the paddles 
-		a, b = 705, 250
-
-
-		ball_x_speed = random.choice(ls) #picks a random float between .001 and .249
-		ball_y_speed = max_speed - abs(ball_x_speed) #ball_y_speed is the remainder
-
-		ball_x_speed *= random.choice([-1, 1]) #creates random up, down, side to side launch
-		ball_y_speed *= random.choice([-1, 1])
-		
-		
-	
-	#left paddle boundaries
-	if y < 0:
-		y = 0
-	if y > 536:
-		y = 536
-
-	#right paddle boundaries
-	if b < 0:
-		b = 0
-	if b > 536:
-		b = 536
-	#boundaries, dwight
-	
-	"""
-
-	#auto reset after goal
-	if p < 0:
-		p = 400 #resets the ball at the middle
-		q = 268
-		
-		x, y = 30, 250 #resets the paddles 
-		a, b = 705, 250
-
-
-		ball_x_speed = random.choice(ls) #picks a random float between .001 and .249
-		ball_y_speed = max_speed - abs(ball_x_speed) #ball_y_speed is the remainder
-
-		ball_x_speed *= random.choice([-1, 1]) #creates random up, down, side to side launch
-		ball_y_speed *= random.choice([-1, 1])		#ball_x_speed *= -1 
-
-	if p > 768:
-		p = 400 #resets the ball at the middle
-		q = 268
-		
-		x, y = 30, 250 #resets the paddles 
-		a, b = 705, 250
-
-
-		ball_x_speed = random.choice(ls) #picks a random float between .001 and .249
-		ball_y_speed = max_speed - abs(ball_x_speed) #ball_y_speed is the remainder
-
-		ball_x_speed *= random.choice([-1, 1]) #creates random up, down, side to side launch
-		ball_y_speed *= random.choice([-1, 1])
-		#ball_x_speed *= -1
-	
-	"""
-
-	#ball horizontal movement
-	if p < 0:
-		ball_x_speed *= -1 
-	if p > 768:
-		ball_x_speed *= -1
-
-
-	#ball vertical movement
-	#the -1 makes the ball bounce off the boundary
-	if q < 0:
-		ball_y_speed *= -1
-	if q > 568:
-		ball_y_speed *= -1
-	
-
-
-
-	#AI, will turn into function later
-	#4 game modes? easy, medium, hard, unstoppable?
-	
-	
-	#recentering
-	if ball_x_speed > 0: #if ball is coming towards ai	
-		if b < q:
-			b += b_speed * multiplier 
-		elif b > q:
-			b -= b_speed * multiplier
-
-	
-	elif ball_x_speed < 0: #if ball is leaving ai
-		if b > 250:
-			b -= b_speed * multiplier
-		elif b < 250:
-			b += b_speed * multiplier
-	
-
-	if p == 75:
-		for i in ball_hitbox:
-			if i in lp_hitbox:
-				ball_x_speed *= -1
-				break
-
-	if p == 693:
-		for i in ball_hitbox:
-			if i in rp_hitbox:
-				ball_x_speed *= -1
-				break
-
-	
-	
-	
-	
 
 	pygame.display.update()
-	clock.tick(2000)
-	
-
-	#debugging
-	#print(clock)
-
-	#print(ball_y_speed, y, b)
-
-	#print(round(q))
-
-
-	#print(round(y))
-
-	#print(round(y))
-
-	#print(round(p), round(y))
-
-	#if round(p) == round(y):
-		#print('collide')
-	#print(0)
