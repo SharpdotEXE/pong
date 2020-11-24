@@ -85,8 +85,6 @@ def check_keys_pressed():
 width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 
-color = (50, 164, 168)
-
 ball_max_speed = .250
 ball_x_speed = random.choice([.01, .02, .03, .04, .05, .06, .07, .08, .09, .1, .11, .12, .13, .14, .15, .16, .17, .18, .19, .2, .21, .22, .23, .24])
 ball_y_speed = ball_max_speed - ball_x_speed
@@ -103,20 +101,18 @@ pygame.init()
 running = True
 while running:
 
-	
-	screen.fill(color)
+	screen.fill((50, 164, 168))
 
 	leftpaddle.load_picture()
 	rightpaddle.load_picture()
 	ball.load_picture()
 
+	ball.check_boundary()
 	ball.move()
 	
-	check_keys_pressed()
-
-	ball.check_boundary()
 	leftpaddle.check_boundary()
 	rightpaddle.check_boundary()
+	check_keys_pressed()
 	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
