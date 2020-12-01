@@ -34,6 +34,20 @@ class paddle:
 
 	def move_hitbox(self):
 		self.hitbox = [i for i in range(round(self.y), round(self.y) + 64)]
+
+	def check_pressed_keys(self):
+
+		keys = pygame.key.get_pressed()
+
+		if keys[pygame.K_w]:
+			leftpaddle.moveup()
+		if keys[pygame.K_s]:
+			leftpaddle.movedown()
+			
+		if keys[pygame.K_UP]:
+			rightpaddle.moveup()
+		if keys[pygame.K_DOWN]:
+			rightpaddle.movedown()
 		
 
 class Ball:
@@ -78,36 +92,30 @@ class Ball:
 		self.x_speed *= -1
 
 
-def check_keys_pressed():
-
-	keys = pygame.key.get_pressed()
-	
-	if keys[pygame.K_w]:
-		leftpaddle.moveup()
-	if keys[pygame.K_s]:
-		leftpaddle.movedown()
-		
-	if keys[pygame.K_UP]:
-		rightpaddle.moveup()
-	if keys[pygame.K_DOWN]:
-		rightpaddle.movedown()
-
-
-def check_hitboxes():
-	if round(ball.x) == 75: 	# left paddle x
-			for i in ball.hitbox:
+	def check_hitbox(self):
+		if round(self.x) == 75: 	# left paddle main x
+			for i in self.hitbox:
 				if i in leftpaddle.hitbox:
-					ball.x_speed *= -1
+					self.x_speed *= -1
 					break
 
-	if round(ball.x) == 693: 	# right paddle x
-		for i in ball.hitbox:
-			if i in rightpaddle.hitbox:
-				ball.x_speed *= -1
-				break
+		if round(self.x) == 693: 	# right paddle secondary x
+			for i in self.hitbox:
+				if i in rightpaddle.hitbox:
+					self.x_speed *= -1
+					break
+
+	def new_speed():
+		ball_max_speed = .250
+		ball_x_speed = random.choice([.01, .02, .03, .04, .05, .06, .07, .08, .09, .1, .11, .12, .13, .14, .15, .16, .17, .18, .19, .2, .21, .22, .23, .24])
+		ball_y_speed = ball_max_speed - ball_x_speed
+		ball_x_speed *= random.choice([-1, 1]) 
+		ball_y_speed *= random.choice([-1, 1])
 
 
 
+fps = pygame.time.Clock()
+color = (50, 164, 168)
 width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 
@@ -127,23 +135,24 @@ pygame.init()
 running = True
 while running:
 
-	screen.fill((50, 164, 168))
+	screen.fill(color)
 
 	leftpaddle.load_picture()
 	rightpaddle.load_picture()
 	ball.load_picture()
 
-	ball.check_boundary()
 	leftpaddle.check_boundary()
-	rightpaddle.check_boundary()
-	
-	check_keys_pressed()
+	leftpaddle.check_pressed_keys()
 	leftpaddle.move_hitbox()
+	
+	rightpaddle.check_boundary()
+	rightpaddle.check_pressed_keys()
 	rightpaddle.move_hitbox()
+
+	ball.check_boundary()
+	ball.check_hitbox()
 	ball.move()
 	ball.move_hitbox()
-	check_hitboxes()
-	
 	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -152,3 +161,4 @@ while running:
 	
 
 	pygame.display.update()
+	
