@@ -107,7 +107,7 @@ class Ball:
 
 	def new_speed(self): # used for adding more balls
 		self.max_speed = 3
-		self.x_speed = random.choice([.12, .24, .36, .48, .60, .72, .84, .96, .108, .120, .132, .144, .156, .168, .180, .192, .204, .216, .228, 2.40, 2.52, 2.64, 2.76, 2.88])
+		self.x_speed = random.choice([1.2, 1.32, 1.44, 1.56, 1.68, 1.8, 1.92, 2.04, 2.16, 2.28, 2.40, 2.52])
 		self.y_speed = self.max_speed - self.x_speed
 		self.x_speed *= random.choice([-1, 1]) 
 		self.y_speed *= random.choice([-1, 1])
@@ -120,7 +120,7 @@ width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 
 ball_max_speed = 3
-ball_x_speed = random.choice([.12, .24, .36, .48, .60, .72, .84, .96, .108, .120, .132, .144, .156, .168, .180, .192, .204, .216, .228, 2.40, 2.52, 2.64, 2.76, 2.88])
+ball_x_speed = random.choice([1.2, 1.32, 1.44, 1.56, 1.68, 1.8, 1.92, 2.04, 2.16, 2.28, 2.40, 2.52])
 ball_y_speed = ball_max_speed - ball_x_speed
 ball_x_speed *= random.choice([-1, 1]) 
 ball_y_speed *= random.choice([-1, 1])
