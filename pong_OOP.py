@@ -93,24 +93,24 @@ class Ball:
 
 
 	def check_hitbox(self):
-		if round(self.x) == 75: 	# left paddle main x
+		if round(self.x) in range(73, 77): 	# left paddle main x
 			for i in self.hitbox:
 				if i in leftpaddle.hitbox:
 					self.x_speed *= -1
 					break
 
-		if round(self.x) == 693: 	# right paddle secondary x
+		if round(self.x) in range(690, 695): 	# right paddle main x
 			for i in self.hitbox:
 				if i in rightpaddle.hitbox:
 					self.x_speed *= -1
 					break
 
-	def new_speed():
-		ball_max_speed = .250
-		ball_x_speed = random.choice([.01, .02, .03, .04, .05, .06, .07, .08, .09, .1, .11, .12, .13, .14, .15, .16, .17, .18, .19, .2, .21, .22, .23, .24])
-		ball_y_speed = ball_max_speed - ball_x_speed
-		ball_x_speed *= random.choice([-1, 1]) 
-		ball_y_speed *= random.choice([-1, 1])
+	def new_speed(self): # used for adding more balls
+		self.max_speed = 3
+		self.x_speed = random.choice([.12, .24, .36, .48, .60, .72, .84, .96, .108, .120, .132, .144, .156, .168, .180, .192, .204, .216, .228, 2.40, 2.52, 2.64, 2.76, 2.88])
+		self.y_speed = self.max_speed - self.x_speed
+		self.x_speed *= random.choice([-1, 1]) 
+		self.y_speed *= random.choice([-1, 1])
 
 
 
@@ -119,15 +119,15 @@ color = (50, 164, 168)
 width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 
-ball_max_speed = .250
-ball_x_speed = random.choice([.01, .02, .03, .04, .05, .06, .07, .08, .09, .1, .11, .12, .13, .14, .15, .16, .17, .18, .19, .2, .21, .22, .23, .24])
+ball_max_speed = 3
+ball_x_speed = random.choice([.12, .24, .36, .48, .60, .72, .84, .96, .108, .120, .132, .144, .156, .168, .180, .192, .204, .216, .228, 2.40, 2.52, 2.64, 2.76, 2.88])
 ball_y_speed = ball_max_speed - ball_x_speed
 ball_x_speed *= random.choice([-1, 1]) 
 ball_y_speed *= random.choice([-1, 1])
 
-ball = Ball(400, 268, .25, ball_x_speed, ball_y_speed, 0, 568, 0, 768, [i for i in range(round(400), round(400) + 32)], 'pongball.png')
-leftpaddle = paddle(30, 250, .225, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
-rightpaddle = paddle(705, 250, .225, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
+ball = Ball(400, 268, ball_max_speed, ball_x_speed, ball_y_speed, 0, 568, 0, 768, [i for i in range(round(400), round(400) + 32)], 'pongball.png')
+leftpaddle = paddle(30, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
+rightpaddle = paddle(705, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
 
 
 pygame.init()
@@ -140,7 +140,7 @@ while running:
 	leftpaddle.load_picture()
 	rightpaddle.load_picture()
 	ball.load_picture()
-
+	
 	leftpaddle.check_boundary()
 	leftpaddle.check_pressed_keys()
 	leftpaddle.move_hitbox()
@@ -158,7 +158,5 @@ while running:
 		if event.type == pygame.QUIT:
 			running = False
 
-	
-
 	pygame.display.update()
-	
+	fps.tick(60)
