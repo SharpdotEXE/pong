@@ -1,6 +1,7 @@
 import pygame
 import random
 
+pygame.init()
 
 class paddle:
 	
@@ -106,21 +107,22 @@ class Ball:
 					break
 
 	def new_speed(self): # used for adding more balls
-		self.max_speed = 3
-		self.x_speed = random.choice([1.2, 1.32, 1.44, 1.56, 1.68, 1.8, 1.92, 2.04, 2.16, 2.28, 2.40, 2.52])
+		self.max_speed = 5
+		self.x_speed = random.choice([2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.2, 4.4, 4.6, 4.8])
 		self.y_speed = self.max_speed - self.x_speed
 		self.x_speed *= random.choice([-1, 1]) 
 		self.y_speed *= random.choice([-1, 1])
 
 
 
-fps = pygame.time.Clock()
+fpsClock = pygame.time.Clock()
+fps = 60
 color = (50, 164, 168)
 width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 
-ball_max_speed = 3
-ball_x_speed = random.choice([1.2, 1.32, 1.44, 1.56, 1.68, 1.8, 1.92, 2.04, 2.16, 2.28, 2.40, 2.52])
+ball_max_speed = 5
+ball_x_speed = random.choice([2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.2, 4.4, 4.6, 4.8])
 ball_y_speed = ball_max_speed - ball_x_speed
 ball_x_speed *= random.choice([-1, 1]) 
 ball_y_speed *= random.choice([-1, 1])
@@ -130,16 +132,30 @@ leftpaddle = paddle(30, 250, 2, 0, 536, [i for i in range(round(250), round(250)
 rightpaddle = paddle(705, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
 
 
-pygame.init()
+left_int_score = 0
+right_int_score = 0
+
+
 
 running = True
 while running:
+
+	left_str_score = str(left_int_score)
+	right_str_score = str(right_int_score)
+
+	myfont = pygame.font.SysFont('Times New Roman', 42)
+	left_score = myfont.render(left_str_score, False, (0, 0, 0))
+	right_score = myfont.render(right_str_score, False, (0, 0, 0))
+	
 
 	screen.fill(color)
 
 	leftpaddle.load_picture()
 	rightpaddle.load_picture()
 	ball.load_picture()
+ 
+	screen.blit(left_score, (250, 50))
+	screen.blit(right_score, (550, 50))
 	
 	leftpaddle.check_boundary()
 	leftpaddle.check_pressed_keys()
@@ -153,10 +169,19 @@ while running:
 	ball.check_hitbox()
 	ball.move()
 	ball.move_hitbox()
+
+
+	if ball.x < ball.left_boundary:
+		left_int_score += 1
+	if ball.x > ball.right_boundary:
+		right_int_score += 1
+		
+
+
 	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
 
 	pygame.display.update()
-	fps.tick(60)
+	fpsClock.tick(fps)
