@@ -112,6 +112,14 @@ class Ball:
 		self.y_speed = self.max_speed - self.x_speed
 		self.x_speed *= random.choice([-1, 1]) 
 		self.y_speed *= random.choice([-1, 1])
+		
+	def recenter(self):
+		if self.x < self.left_boundary or self.x > self.right_boundary:
+			self.x = 400
+			self.y = 268
+			leftpaddle.y, rightpaddle.y = 250, 250
+
+			self.new_speed()
 
 
 
