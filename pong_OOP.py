@@ -122,12 +122,45 @@ class Ball:
 			self.new_speed()
 
 
+class text:
+
+	def __init__(self, x, y, font, color, str_score, int_score):
+		self.x = x
+		self.y = y
+		self.font = font 
+		self.color = color
+		self.str_score = str_score
+		self.int_score = int_score
+
+	def convert_score_types(self):
+		self.str_score = str(self.int_score)
+
+	def change_int_score(self):
+		if ball.x < ball.left_boundary:
+			right_score.int_score += 1
+		if ball.x > ball.right_boundary:
+			left_score.int_score += 1
+
+	def load_score(self):
+		self.score = self.font.render(self.str_score, False, self.color)
+		screen.blit(self.score, (self.x, self.y))
+
+
+def check_update_score():
+	if ball.x < ball.left_boundary:
+		right_score.int_score += 1
+	if ball.x > ball.right_boundary:
+		left_score.int_score += 1
+
 
 fpsClock = pygame.time.Clock()
 fps = 60
 color = (50, 164, 168)
 width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
+left_int_score = 0
+right_int_score = 0
+
 
 ball_max_speed = 5
 ball_x_speed = random.choice([2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.2, 4.4, 4.6, 4.8])
@@ -138,22 +171,16 @@ ball_y_speed *= random.choice([-1, 1])
 ball = Ball(400, 268, ball_max_speed, ball_x_speed, ball_y_speed, 0, 568, 0, 768, [i for i in range(round(400), round(400) + 32)], 'pongball.png')
 leftpaddle = paddle(30, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
 rightpaddle = paddle(705, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
-
-
-left_int_score = 0
-right_int_score = 0
+left_score = text(250, 50, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
+right_score = text(550, 50, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
 
 
 
 running = True
 while running:
 
-	left_str_score = str(left_int_score)
-	right_str_score = str(right_int_score)
-
-	myfont = pygame.font.SysFont('Times New Roman', 42)
-	left_score = myfont.render(left_str_score, False, (0, 0, 0))
-	right_score = myfont.render(right_str_score, False, (0, 0, 0))
+	
+	
 	
 
 	screen.fill(color)
@@ -161,9 +188,13 @@ while running:
 	leftpaddle.load_picture()
 	rightpaddle.load_picture()
 	ball.load_picture()
- 
-	screen.blit(left_score, (250, 50))
-	screen.blit(right_score, (550, 50))
+
+	left_score.convert_score_types()
+	left_score.load_score()
+
+	right_score.convert_score_types()
+	right_score.load_score()
+	
 	
 	leftpaddle.check_boundary()
 	leftpaddle.check_pressed_keys()
@@ -179,10 +210,8 @@ while running:
 	ball.move_hitbox()
 
 
-	if ball.x < ball.left_boundary:
-		left_int_score += 1
-	if ball.x > ball.right_boundary:
-		right_int_score += 1
+	check_update_score()
+	
 		
 
 
