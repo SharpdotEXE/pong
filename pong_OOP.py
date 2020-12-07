@@ -94,19 +94,19 @@ class Ball:
 
 
 	def check_hitbox(self):
-		if round(self.x) in range(73, 77): 	# left paddle main x
+		if round(self.x) < 75: 	# left paddle main x
 			for i in self.hitbox:
 				if i in leftpaddle.hitbox:
-					self.x_speed *= -1
+					self.x_speed *= -1.1
 					break
 
-		if round(self.x) in range(690, 695): 	# right paddle main x
+		if round(self.x) >693: 	# right paddle main x
 			for i in self.hitbox:
 				if i in rightpaddle.hitbox:
-					self.x_speed *= -1
+					self.x_speed *= -1.1
 					break
 
-	def new_speed(self): # used for adding more balls
+	def new_speed(self): # assigns a new x and y speed to the ball
 		self.max_speed = 5
 		self.x_speed = random.choice([2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.2, 4.4, 4.6, 4.8])
 		self.y_speed = self.max_speed - self.x_speed
@@ -135,11 +135,6 @@ class text:
 	def convert_score_types(self):
 		self.str_score = str(self.int_score)
 
-	def change_int_score(self):
-		if ball.x < ball.left_boundary:
-			right_score.int_score += 1
-		if ball.x > ball.right_boundary:
-			left_score.int_score += 1
 
 	def load_score(self):
 		self.score = self.font.render(self.str_score, False, self.color)
@@ -149,8 +144,10 @@ class text:
 def check_update_score():
 	if ball.x < ball.left_boundary:
 		right_score.int_score += 1
+		
 	if ball.x > ball.right_boundary:
 		left_score.int_score += 1
+		 
 
 
 fpsClock = pygame.time.Clock()
@@ -213,7 +210,7 @@ while running:
 	check_update_score()
 	
 		
-
+	ball.recenter()
 
 	
 	for event in pygame.event.get():
