@@ -2,8 +2,8 @@
 
 pygame needs to be installed in order to run this. the command for windows is: python -m pip install -U pygame --user
 
-pong.py is the current mostly working version. needs a few things such as better presentation of score 
+pong_OOP.py is the current working version. 
 
-pong_OOP.py is non-functional but cleaner and uses classes. Still a work in progress
+pong.py is an older, less functional version that still contains some useful code for future improvements 
 
 paddle.png and pongball.png are images associated with these programs.
