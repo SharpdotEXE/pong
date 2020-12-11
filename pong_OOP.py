@@ -54,7 +54,6 @@ class paddle:
 class Ball:
 
 
-
 	def __init__(self, x, y, max_speed, x_speed, y_speed, top_boundary, bottom_boundary, left_boundary, right_boundary, hitbox, image):
 		self.x = x
 		self.y = y
@@ -152,7 +151,7 @@ def check_recenter():
 
 		ball.new_speed()
 
-	
+#creating variables and objects
 
 fpsClock = pygame.time.Clock()
 fps = 60
@@ -167,21 +166,15 @@ ball_x_speed *= random.choice([-1, 1])
 ball_y_speed *= random.choice([-1, 1])
 
 
-
 ball = Ball(400, 268, ball_max_speed, ball_x_speed, ball_y_speed, 0, 568, 0, 768, [i for i in range(round(400), round(400) + 32)], 'pongball.png')
 leftpaddle = paddle(30, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
 rightpaddle = paddle(705, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
 left_score = text(250, 50, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
 right_score = text(550, 50, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
 
-
-
+#game loop
 running = True
 while running:
-
-	
-	
-	
 
 	screen.fill(color)
 
@@ -194,7 +187,6 @@ while running:
 
 	right_score.convert_score_types()
 	right_score.load_score()
-	
 	
 	leftpaddle.check_boundary()
 	leftpaddle.check_pressed_keys()
@@ -209,15 +201,12 @@ while running:
 	ball.move()
 	ball.move_hitbox()
 
-
 	check_update_score()
 	check_recenter()
 	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
-	
-	
 
 	pygame.display.update()
 	fpsClock.tick(fps)
