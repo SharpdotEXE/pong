@@ -174,8 +174,8 @@ ball_y_speed *= random.choice([-1, 1])
 ball = Ball(400, 268, ball_max_speed, ball_x_speed, ball_y_speed, 0, 568, 0, 768, [i for i in range(round(400), round(400) + 32)], 'pongball.png')
 leftpaddle = paddle(30, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
 rightpaddle = paddle(705, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
-left_score = text(250, 625, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
-right_score = text(550, 625, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
+left_score = text(150, 625, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
+right_score = text(650, 625, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
 
 #game loop
 running = True
