@@ -107,7 +107,7 @@ class Ball:
 					break
 
 
-	def new_speed(self): # used for adding more balls
+	def new_speed(self):
 		self.max_speed = 5
 		self.x_speed = random.choice([2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.2, 4.4, 4.6, 4.8])
 		self.y_speed = self.max_speed - self.x_speed
