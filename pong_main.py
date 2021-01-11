@@ -132,9 +132,14 @@ class text:
 
 
 	def load_score(self):
+		self.convert_score_types()
 		self.score = self.font.render(self.str_score, False, self.color)
 		screen.blit(self.score, (self.x, self.y))
 
+
+
+def scorebox():
+	pygame.draw.line(screen, 'black', (0, 600), (800, 600), 5)
 
 
 def check_update_score():
@@ -156,7 +161,7 @@ def check_recenter():
 fpsClock = pygame.time.Clock()
 fps = 60
 color = (50, 164, 168)
-width, height = 800, 600
+width, height = 800, 700
 screen = pygame.display.set_mode((width, height))
 
 ball_max_speed = 5
@@ -169,8 +174,8 @@ ball_y_speed *= random.choice([-1, 1])
 ball = Ball(400, 268, ball_max_speed, ball_x_speed, ball_y_speed, 0, 568, 0, 768, [i for i in range(round(400), round(400) + 32)], 'pongball.png')
 leftpaddle = paddle(30, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
 rightpaddle = paddle(705, 250, 2, 0, 536, [i for i in range(round(250), round(250) + 64)], 'paddle.png')
-left_score = text(250, 50, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
-right_score = text(550, 50, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
+left_score = text(250, 625, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
+right_score = text(550, 625, pygame.font.SysFont('Times New Roman', 42), (0, 0, 0), '0', 0)
 
 #game loop
 running = True
@@ -182,10 +187,8 @@ while running:
 	rightpaddle.load_image()
 	ball.load_image()
 
-	left_score.convert_score_types()
 	left_score.load_score()
 
-	right_score.convert_score_types()
 	right_score.load_score()
 	
 	leftpaddle.check_boundary()
@@ -203,6 +206,7 @@ while running:
 
 	check_update_score()
 	check_recenter()
+	scorebox()
 	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
