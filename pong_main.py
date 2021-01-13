@@ -138,7 +138,7 @@ class text:
 
 
 
-def scorebox():
+def scoreboard():
 	pygame.draw.line(screen, 'black', (0, 600), (800, 600), 5)
 
 
@@ -206,7 +206,7 @@ while running:
 
 	check_update_score()
 	check_recenter()
-	scorebox()
+	scoreboard()
 	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
