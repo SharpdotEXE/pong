@@ -13,13 +13,20 @@ class Paddle:
         self.height = 64
         self.speed = 2
         self.color = (52, 235, 195)
-        self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
         self.face = face
+
+        self.total_hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.face_hitbox = pygame.Rect(self.face, self.y, 1, self.height)
+        self.top_hitbox = pygame.Rect(self.x, self.y, self.width, 1)
+        self.bottom_hitbox = pygame.Rect(self.x, self.y + self.height, self.width, 1)
+
+
+
 
 
     def render(self):
 
-        pygame.draw.rect(screen, self.color, self.hit_box)
+        pygame.draw.rect(screen, self.color, self.total_hitbox)
 
 
     def check_boundary(self):
@@ -41,9 +48,12 @@ class Paddle:
         self.y += self.speed
 
 
-    def update_hit_box(self):
+    def update_hitboxes(self):
 
-        self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.total_hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.face_hitbox = pygame.Rect(self.face, self.y, 1, self.height)
+        self.top_hitbox = pygame.Rect(self.x, self.y, self.width, 1)
+        self.bottom_hitbox = pygame.Rect(self.x, self.y + self.height, self.width, 1)
 
 
     def check_pressed_keys(self):
@@ -63,7 +73,7 @@ class Paddle:
 
     def update(self):
         self.render()
-        self.update_hit_box()
+        self.update_hitboxes()
         self.check_boundary()
         self.check_pressed_keys()
 
@@ -77,7 +87,7 @@ class Ball:
         self.width = 32
         self.height = 32
         self.max_speed = 5
-        self.x_speed = random.choice(range(5, 40)) / 10
+        self.x_speed = random.choice(range(20, 40)) / 10
         self.y_speed = self.max_speed - self.x_speed
         self.color = (3, 123, 252)
         self.top_boundary = 0
@@ -89,7 +99,7 @@ class Ball:
 
     def render(self):
 
-        pygame.draw.circle(screen, self.color, [self.x + .5 * self.width, self.y + .5 * self.height], 16)
+        pygame.draw.rect(screen, self.color, self.hit_box)
 
  
     def move(self):
@@ -98,19 +108,13 @@ class Ball:
         self.y += self.y_speed
 
 
-    def check_wall_bounce(self):
+    def check_wall_collision(self):
 
         if self.y <= self.top_boundary:
             self.y_speed *= -1
 
         if self.y >= self.bottom_boundary:
             self.y_speed *= -1
-
-
-    def bounce_off_paddle(self):
-        pass
-        #if self.x
-
 
 
     def update_hit_box(self):
@@ -120,12 +124,25 @@ class Ball:
 
     def check_paddle_collision(self):
 
-        if pygame.Rect.colliderect(self.hit_box, left_paddle.hit_box):
-            self.bounce_off_paddle()
+        if pygame.Rect.colliderect(self.hit_box, left_paddle.face_hitbox):
+            self.x_speed *= -1
 
-        if pygame.Rect.colliderect(self.hit_box, right_paddle.hit_box):
-            self.bounce_off_paddle()
- 
+        if pygame.Rect.colliderect(self.hit_box, left_paddle.top_hitbox):
+            self.y_speed *= -1
+
+        if pygame.Rect.colliderect(self.hit_box, left_paddle.bottom_hitbox):
+            self.y_speed *= -1
+
+
+        if pygame.Rect.colliderect(self.hit_box, right_paddle.face_hitbox):
+            self.x_speed *= -1
+
+        if pygame.Rect.colliderect(self.hit_box, right_paddle.top_hitbox):
+            self.y_speed *= -1
+
+        if pygame.Rect.colliderect(self.hit_box, right_paddle.bottom_hitbox):
+            self.y_speed *= -1
+
 
     def new_speed(self):
 
@@ -141,7 +158,7 @@ class Ball:
         self.render()
         self.move()
         self.update_hit_box()
-        self.check_wall_bounce()
+        self.check_wall_collision()
         self.check_paddle_collision()
 
 
@@ -169,8 +186,10 @@ class Score_board:
         screen.blit(self.score, (self.x, self.y))
 
 
-def render_score_board():
-        pygame.draw.line(screen, 'black', (0, 600), (800, 600), 5)
+def render_field():
+
+        pygame.draw.line(screen, 'black', (0, 600), (800, 600), 5) # bottom line
+        pygame.draw.line(screen, 'black', (400, 0), (400, 700), 2) # mid line
 
 
 def check_update_score():
@@ -223,35 +242,16 @@ while running:
 
     screen.fill(color)
 
-    pygame.draw.line(screen, 'black', (left_paddle.face, 0), (left_paddle.face, height))
-    pygame.draw.line(screen, 'black', (right_paddle.face, 0), (right_paddle.face, height))
-
-    keys = pygame.key.get_pressed()
-
-    if keys[pygame.K_SPACE]:
-
-        ball.x_speed, ball.y_speed = 0, 0
-
-    keys = pygame.key.get_pressed()
-
-    if keys[pygame.K_b]:
-
-        ball.x_speed, ball.y_speed = copy_x, copy_y
-
-
     left_score.render_score()
-
     right_score.render_score()
-
 
     ball.update()
     left_paddle.update()
     right_paddle.update()
 
-
     check_update_score()
     check_recenter()
-    render_score_board()
+    render_field()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -260,5 +260,4 @@ while running:
     pygame.display.flip()
     fpsClock.tick(fps)
 
-    print(ball.hit_box, right_paddle.hit_box)
-    #print(round(ball.x), round(ball.y))
+    #print(round(ball.x), left_paddle.face)
