@@ -6,19 +6,20 @@ pygame.init()
 
 class Paddle:
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, face):
         self.x = x
         self.y = y
-        self.height = 64
         self.width = 30
+        self.height = 64
         self.speed = 2
         self.color = (52, 235, 195)
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.face = face
 
 
     def render(self):
 
-        pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
+        pygame.draw.rect(screen, self.color, self.hit_box)
 
 
     def check_boundary(self):
@@ -79,18 +80,18 @@ class Ball:
         self.x_speed = random.choice(range(5, 40)) / 10
         self.y_speed = self.max_speed - self.x_speed
         self.color = (3, 123, 252)
-        self.top_boundary = 18
-        self.bottom_boundary = 583
+        self.top_boundary = 0
+        self.bottom_boundary = 568
         self.left_boundary = left_boundary
         self.right_boundary = right_boundary
-        self.hit_box = pygame.Rect(self.x + self.width, self.y, self.width, self.height)
+        self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
 
 
     def render(self):
 
-        pygame.draw.circle(screen, self.color, [self.x, self.y], 16)
+        pygame.draw.circle(screen, self.color, [self.x + .5 * self.width, self.y + .5 * self.height], 16)
 
-
+ 
     def move(self):
 
         self.x += self.x_speed
@@ -106,15 +107,9 @@ class Ball:
             self.y_speed *= -1
 
 
-    def vertical_bounce(self):
-
-        self.y_speed *= -1
-
-
-    def horizontal_bounce(self):
-
-        self.x_speed *= -1.1
-        self.x_speed = round(self.x_speed, 1)
+    def bounce_off_paddle(self):
+        pass
+        #if self.x
 
 
 
@@ -125,22 +120,12 @@ class Ball:
 
     def check_paddle_collision(self):
 
+        if pygame.Rect.colliderect(self.hit_box, left_paddle.hit_box):
+            self.bounce_off_paddle()
 
         if pygame.Rect.colliderect(self.hit_box, right_paddle.hit_box):
-            
-            if self.x > right_paddle.x:
-                self.vertical_bounce()
-            else:
-                self.horizontal_bounce()
-
-        if pygame.Rect.colliderect(self.hit_box, left_paddle.hit_box):
-
-            if self.x < left_paddle.x + left_paddle.width:
-                self.vertical_bounce()
-            else:
-                self.horizontal_bounce()
-
-
+            self.bounce_off_paddle()
+ 
 
     def new_speed(self):
 
@@ -222,8 +207,11 @@ right_boundary = 768
 ball = Ball()
 ball.new_speed()
 
-left_paddle = Paddle(50, 250)
-right_paddle = Paddle(720, 250)
+copy_x = ball.x_speed
+copy_y = ball.y_speed
+
+left_paddle = Paddle(50, 250, 80)
+right_paddle = Paddle(720, 250, 720)
 
 left_score = Score_board(150, 625)
 right_score = Score_board(650, 625)
@@ -235,10 +223,20 @@ while running:
 
     screen.fill(color)
 
+    pygame.draw.line(screen, 'black', (left_paddle.face, 0), (left_paddle.face, height))
+    pygame.draw.line(screen, 'black', (right_paddle.face, 0), (right_paddle.face, height))
+
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_SPACE]:
+
         ball.x_speed, ball.y_speed = 0, 0
+
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_b]:
+
+        ball.x_speed, ball.y_speed = copy_x, copy_y
 
 
     left_score.render_score()
