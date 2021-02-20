@@ -20,14 +20,9 @@ class Paddle:
         self.top_hitbox = pygame.Rect(self.x, self.y, self.width, 1)
         self.bottom_hitbox = pygame.Rect(self.x, self.y + self.height, self.width, 1)
 
-
-
-
-
     def render(self):
 
         pygame.draw.rect(screen, self.color, self.total_hitbox)
-
 
     def check_boundary(self):
 
@@ -37,16 +32,13 @@ class Paddle:
         if self.y >= bottom_boundary:
             self.y = bottom_boundary
 
-
     def move_up(self):
 
         self.y -= self.speed
 
-
     def move_down(self):
 
         self.y += self.speed
-
 
     def update_hitboxes(self):
 
@@ -54,7 +46,6 @@ class Paddle:
         self.face_hitbox = pygame.Rect(self.face, self.y, 1, self.height)
         self.top_hitbox = pygame.Rect(self.x, self.y, self.width, 1)
         self.bottom_hitbox = pygame.Rect(self.x, self.y + self.height, self.width, 1)
-
 
     def check_pressed_keys(self):
 
@@ -69,7 +60,6 @@ class Paddle:
             right_paddle.move_up()
         if keys[pygame.K_DOWN]:
             right_paddle.move_down()
-
 
     def update(self):
         self.render()
@@ -96,17 +86,14 @@ class Ball:
         self.right_boundary = right_boundary
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
 
-
     def render(self):
 
         pygame.draw.rect(screen, self.color, self.hit_box)
 
- 
     def move(self):
 
         self.x += self.x_speed
         self.y += self.y_speed
-
 
     def check_wall_collision(self):
 
@@ -116,11 +103,9 @@ class Ball:
         if self.y >= self.bottom_boundary:
             self.y_speed *= -1
 
-
     def update_hit_box(self):
 
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
-
 
     def check_paddle_collision(self):
 
@@ -133,7 +118,6 @@ class Ball:
         if pygame.Rect.colliderect(self.hit_box, left_paddle.bottom_hitbox):
             self.y_speed *= -1
 
-
         if pygame.Rect.colliderect(self.hit_box, right_paddle.face_hitbox):
             self.x_speed *= -1
 
@@ -143,7 +127,6 @@ class Ball:
         if pygame.Rect.colliderect(self.hit_box, right_paddle.bottom_hitbox):
             self.y_speed *= -1
 
-
     def new_speed(self):
 
         self.x_speed = random.choice(range(10, 45)) / 10
@@ -151,7 +134,6 @@ class Ball:
 
         self.x_speed *= random.choice([-1, 1])
         self.y_speed *= random.choice([-1, 1])
-
 
     def update(self):
 
@@ -165,7 +147,6 @@ class Ball:
 class Score_board:
 
     def __init__(self, x, y):
-
         self.x = x
         self.y = y
         self.font = pygame.font.SysFont('Times New Roman', 42)
@@ -173,27 +154,21 @@ class Score_board:
         self.str_score = '0'
         self.int_score = 0
 
-
     def convert_score_types(self):
-
         self.str_score = str(self.int_score)
 
-
     def render_score(self):
-
         self.convert_score_types()
         self.score = self.font.render(self.str_score, False, self.color)
         screen.blit(self.score, (self.x, self.y))
 
 
 def render_field():
-
-        pygame.draw.line(screen, 'black', (0, 600), (800, 600), 5) # bottom line
-        pygame.draw.line(screen, 'black', (400, 0), (400, 700), 2) # mid line
+    pygame.draw.line(screen, 'black', (0, 600), (800, 600), 5)  # bottom line
+    pygame.draw.line(screen, 'black', (400, 0), (400, 700), 2)  # mid line
 
 
 def check_update_score():
-
     if ball.x < ball.left_boundary:
         right_score.int_score += 1
 
@@ -202,13 +177,13 @@ def check_update_score():
 
 
 def check_recenter():
-
     if ball.x < ball.left_boundary or ball.x > ball.right_boundary:
         ball.x = 400
         ball.y = 268
         left_paddle.y, right_paddle.y = 250, 250
 
         ball.new_speed()
+
 
 # creating variables and objects
 
@@ -235,7 +210,6 @@ right_paddle = Paddle(720, 250, 720)
 left_score = Score_board(150, 625)
 right_score = Score_board(650, 625)
 
-
 # game loop
 running = True
 while running:
@@ -245,13 +219,13 @@ while running:
     left_score.render_score()
     right_score.render_score()
 
-    ball.update()
-    left_paddle.update()
-    right_paddle.update()
-
     check_update_score()
     check_recenter()
     render_field()
+
+    ball.update()
+    left_paddle.update()
+    right_paddle.update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -260,4 +234,4 @@ while running:
     pygame.display.flip()
     fpsClock.tick(fps)
 
-    #print(round(ball.x), left_paddle.face)
+    # print(round(ball.x), left_paddle.face)
