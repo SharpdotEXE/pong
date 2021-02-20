@@ -13,7 +13,10 @@ class Paddle:
         self.height = 64
         self.speed = 2
         self.color = (52, 235, 195)
+        self.top_boundary = 0
+        self.bottom_boundary = 536
         self.face = face
+
 
         self.total_hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
         self.face_hitbox = pygame.Rect(self.face, self.y, 1, self.height)
@@ -26,11 +29,11 @@ class Paddle:
 
     def check_boundary(self):
 
-        if self.y <= top_boundary:
-            self.y = top_boundary
+        if self.y <= self.top_boundary:
+            self.y = self.top_boundary
 
-        if self.y >= bottom_boundary:
-            self.y = bottom_boundary
+        if self.y >= self.bottom_boundary:
+            self.y = self.bottom_boundary
 
     def move_up(self):
 
@@ -82,18 +85,22 @@ class Ball:
         self.color = (3, 123, 252)
         self.top_boundary = 0
         self.bottom_boundary = 568
-        self.left_boundary = left_boundary
-        self.right_boundary = right_boundary
+        self.left_boundary = 0
+        self.right_boundary = 800
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.in_play = True
+
 
     def render(self):
 
         pygame.draw.rect(screen, self.color, self.hit_box)
 
+
     def move(self):
 
         self.x += self.x_speed
         self.y += self.y_speed
+
 
     def check_wall_collision(self):
 
@@ -103,9 +110,11 @@ class Ball:
         if self.y >= self.bottom_boundary:
             self.y_speed *= -1
 
+
     def update_hit_box(self):
 
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
+
 
     def check_paddle_collision(self):
 
@@ -127,6 +136,7 @@ class Ball:
         if pygame.Rect.colliderect(self.hit_box, right_paddle.bottom_hitbox):
             self.y_speed *= -1
 
+
     def new_speed(self):
 
         self.x_speed = random.choice(range(10, 45)) / 10
@@ -134,6 +144,7 @@ class Ball:
 
         self.x_speed *= random.choice([-1, 1])
         self.y_speed *= random.choice([-1, 1])
+
 
     def update(self):
 
@@ -154,8 +165,10 @@ class Score_board:
         self.str_score = '0'
         self.int_score = 0
 
+
     def convert_score_types(self):
         self.str_score = str(self.int_score)
+
 
     def render_score(self):
         self.convert_score_types()
@@ -178,6 +191,7 @@ def check_update_score():
 
 def check_recenter():
     if ball.x < ball.left_boundary or ball.x > ball.right_boundary:
+
         ball.x = 400
         ball.y = 268
         left_paddle.y, right_paddle.y = 250, 250
@@ -193,16 +207,9 @@ fps = 60
 color = (50, 164, 168)
 width, height = 800, 700
 screen = pygame.display.set_mode((width, height))
-top_boundary = 0
-bottom_boundary = 536
-left_boundary = 0
-right_boundary = 768
 
 ball = Ball()
 ball.new_speed()
-
-copy_x = ball.x_speed
-copy_y = ball.y_speed
 
 left_paddle = Paddle(50, 250, 80)
 right_paddle = Paddle(720, 250, 720)
