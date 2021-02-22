@@ -65,6 +65,7 @@ class Paddle:
             right_paddle.move_down()
 
     def update(self):
+        
         self.render()
         self.update_hitboxes()
         self.check_boundary()
@@ -167,21 +168,25 @@ class Score_board:
 
 
     def convert_score_types(self):
+
         self.str_score = str(self.int_score)
 
 
     def render_score(self):
+
         self.convert_score_types()
         self.score = self.font.render(self.str_score, False, self.color)
         screen.blit(self.score, (self.x, self.y))
 
 
 def render_field():
+
     pygame.draw.line(screen, 'black', (0, 600), (800, 600), 5)  # bottom line
     pygame.draw.line(screen, 'black', (400, 0), (400, 700), 2)  # mid line
 
 
 def check_update_score():
+
     if ball.x < ball.left_boundary:
         right_score.int_score += 1
 
@@ -190,6 +195,7 @@ def check_update_score():
 
 
 def check_recenter():
+
     if ball.x < ball.left_boundary or ball.x > ball.right_boundary:
 
         ball.x = 400
