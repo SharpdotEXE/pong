@@ -7,6 +7,7 @@ pygame.init()
 class Paddle:
 
     def __init__(self, x, y, face):
+        
         self.x = x
         self.y = y
         self.width = 30
