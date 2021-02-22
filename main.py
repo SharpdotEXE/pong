@@ -114,6 +114,8 @@ class Ball:
 
     def update_geometry(self):
 
+        self.x = round(self.x)
+        self.y = round(self.y)
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
 
 
@@ -125,7 +127,6 @@ class Ball:
         if pygame.Rect.colliderect(self.hit_box, right_paddle.hit_box):
             self.x_speed *= -1
 
-        
 
     def new_speed(self):
 
@@ -236,4 +237,4 @@ while running:
     pygame.display.flip()
     fpsClock.tick(fps)
 
-    # print(round(ball.x), left_paddle.face)
+    print(round(ball.x), left_paddle.face)
