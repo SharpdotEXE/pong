@@ -159,6 +159,7 @@ class Ball:
 class Score_board:
 
     def __init__(self, x, y):
+        
         self.x = x
         self.y = y
         self.font = pygame.font.SysFont('Times New Roman', 42)
