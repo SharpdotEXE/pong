@@ -6,10 +6,9 @@ pygame.init()
 
 class Paddle:
 
-    def __init__(self, x, y, face):
-        
+    def __init__(self, x, face):
         self.x = x
-        self.y = y
+        self.y = 250
         self.width = 30
         self.height = 64
         self.speed = 2
@@ -18,15 +17,13 @@ class Paddle:
         self.bottom_boundary = 536
         self.face = face
 
+        self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
 
-        self.total_hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.face_hitbox = pygame.Rect(self.face, self.y, 1, self.height)
-        self.top_hitbox = pygame.Rect(self.x, self.y, self.width, 1)
-        self.bottom_hitbox = pygame.Rect(self.x, self.y + self.height, self.width, 1)
 
     def render(self):
 
-        pygame.draw.rect(screen, self.color, self.total_hitbox)
+        pygame.draw.rect(screen, self.color, self.hit_box)
+
 
     def check_boundary(self):
 
@@ -36,20 +33,21 @@ class Paddle:
         if self.y >= self.bottom_boundary:
             self.y = self.bottom_boundary
 
+
     def move_up(self):
 
         self.y -= self.speed
+
 
     def move_down(self):
 
         self.y += self.speed
 
-    def update_hitboxes(self):
 
-        self.total_hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.face_hitbox = pygame.Rect(self.face, self.y, 1, self.height)
-        self.top_hitbox = pygame.Rect(self.x, self.y, self.width, 1)
-        self.bottom_hitbox = pygame.Rect(self.x, self.y + self.height, self.width, 1)
+    def update_hitbox(self):
+
+        self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
+
 
     def check_pressed_keys(self):
 
@@ -65,12 +63,14 @@ class Paddle:
         if keys[pygame.K_DOWN]:
             right_paddle.move_down()
 
+
     def update(self):
-        
+
         self.render()
-        self.update_hitboxes()
+        self.update_hitbox()
         self.check_boundary()
         self.check_pressed_keys()
+
 
 
 class Ball:
@@ -82,7 +82,7 @@ class Ball:
         self.width = 32
         self.height = 32
         self.max_speed = 5
-        self.x_speed = random.choice(range(20, 40)) / 10
+        self.x_speed = random.choice(range(30, 40)) / 10
         self.y_speed = self.max_speed - self.x_speed
         self.color = (3, 123, 252)
         self.top_boundary = 0
@@ -90,7 +90,6 @@ class Ball:
         self.left_boundary = 0
         self.right_boundary = 800
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.in_play = True
 
 
     def render(self):
@@ -113,31 +112,20 @@ class Ball:
             self.y_speed *= -1
 
 
-    def update_hit_box(self):
+    def update_geometry(self):
 
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
 
 
     def check_paddle_collision(self):
 
-        if pygame.Rect.colliderect(self.hit_box, left_paddle.face_hitbox):
+        if pygame.Rect.colliderect(self.hit_box, left_paddle.hit_box):
             self.x_speed *= -1
 
-        if pygame.Rect.colliderect(self.hit_box, left_paddle.top_hitbox):
-            self.y_speed *= -1
-
-        if pygame.Rect.colliderect(self.hit_box, left_paddle.bottom_hitbox):
-            self.y_speed *= -1
-
-        if pygame.Rect.colliderect(self.hit_box, right_paddle.face_hitbox):
+        if pygame.Rect.colliderect(self.hit_box, right_paddle.hit_box):
             self.x_speed *= -1
 
-        if pygame.Rect.colliderect(self.hit_box, right_paddle.top_hitbox):
-            self.y_speed *= -1
-
-        if pygame.Rect.colliderect(self.hit_box, right_paddle.bottom_hitbox):
-            self.y_speed *= -1
-
+        
 
     def new_speed(self):
 
@@ -152,7 +140,7 @@ class Ball:
 
         self.render()
         self.move()
-        self.update_hit_box()
+        self.update_geometry()
         self.check_wall_collision()
         self.check_paddle_collision()
 
@@ -160,7 +148,6 @@ class Ball:
 class Score_board:
 
     def __init__(self, x, y):
-        
         self.x = x
         self.y = y
         self.font = pygame.font.SysFont('Times New Roman', 42)
@@ -219,8 +206,8 @@ screen = pygame.display.set_mode((width, height))
 ball = Ball()
 ball.new_speed()
 
-left_paddle = Paddle(50, 250, 80)
-right_paddle = Paddle(720, 250, 720)
+left_paddle = Paddle(50, 80)
+right_paddle = Paddle(720, 720)
 
 left_score = Score_board(150, 625)
 right_score = Score_board(650, 625)
