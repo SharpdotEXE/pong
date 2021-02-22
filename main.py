@@ -82,7 +82,7 @@ class Ball:
         self.width = 32
         self.height = 32
         self.max_speed = 5
-        self.x_speed = random.choice(range(30, 40)) / 10
+        self.x_speed = random.choice(range(4 * self.max_speed, 8 * self.max_speed)) / 10        
         self.y_speed = self.max_speed - self.x_speed
         self.color = (3, 123, 252)
         self.top_boundary = 0
@@ -130,8 +130,11 @@ class Ball:
 
     def new_speed(self):
 
-        self.x_speed = random.choice(range(10, 45)) / 10
+        self.x_speed = random.choice(range(4 * self.max_speed, 8 * self.max_speed)) / 10
+        self.x_speed = round(self.x_speed, 1)
+
         self.y_speed = self.max_speed - self.x_speed
+        self.y_speed = round(self.y_speed, 1)
 
         self.x_speed *= random.choice([-1, 1])
         self.y_speed *= random.choice([-1, 1])
@@ -237,4 +240,4 @@ while running:
     pygame.display.flip()
     fpsClock.tick(fps)
 
-    print(round(ball.x), left_paddle.face)
+    print(ball.x_speed, ball.y_speed)
