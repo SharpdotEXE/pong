@@ -2,7 +2,7 @@
 
 pygame needs to be installed in order to run this.
 
-pong_main.py is the current working version. 
+main.py is the current working version. 
 
 "W" and "D" control the left paddle
 "Up arrow" and "Down arrow" control the right paddle
