@@ -53,7 +53,6 @@ class Paddle:
     def update_geometry(self):
 
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
-
         self.left_face_hit_box = pygame.Rect(self.x + self.width, self.y, 1, self.height)
         self.right_face_hit_box = pygame.Rect(self.x, self.y, 1, self.height)
         self.top_hit_box = pygame.Rect(self.x, self.y, self.width, 1)
@@ -200,7 +199,7 @@ class Ball:
         self.check_paddle_collision()
 
 
-class Score_board:
+class Scoreboard:
 
     def __init__(self, x, y):
 
@@ -265,8 +264,8 @@ ball.new_speed()
 left_paddle = Paddle(50, 80)
 right_paddle = Paddle(720, 720)
 
-left_score = Score_board(150, 625)
-right_score = Score_board(650, 625)
+left_score = Scoreboard(150, 625)
+right_score = Scoreboard(650, 625)
 
 # game loop
 running = True
