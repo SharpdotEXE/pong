@@ -290,5 +290,3 @@ while running:
 
     pygame.display.flip()
     fpsClock.tick(fps)
-
-    print(round(ball.x_speed, 2), round(ball.y_speed, 2))
