@@ -53,8 +53,8 @@ class Paddle:
     def update_geometry(self):
 
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.left_face_hit_box = pygame.Rect(self.x + self.width, self.y, 1, self.height)
-        self.right_face_hit_box = pygame.Rect(self.x, self.y, 1, self.height)
+        self.left_paddle_face_hit_box = pygame.Rect(self.x + self.width, self.y, 1, self.height)
+        self.right_paddle_face_hit_box = pygame.Rect(self.x, self.y, 1, self.height)
         self.top_hit_box = pygame.Rect(self.x, self.y, self.width, 1)
         self.bottom_hit_box = pygame.Rect(self.x, self.y + self.height, self.width, 1)
 
@@ -135,7 +135,7 @@ class Ball:
 
         if self.x_speed < 0:
 
-            if pygame.Rect.colliderect(self.hit_box, left_paddle.left_face_hit_box):
+            if pygame.Rect.colliderect(self.hit_box, left_paddle.left_paddle_face_hit_box):
 
                 self.x = left_paddle.face + 1
 
@@ -158,7 +158,7 @@ class Ball:
 
         elif self.x_speed > 0:
 
-            if pygame.Rect.colliderect(self.hit_box, right_paddle.right_face_hit_box):
+            if pygame.Rect.colliderect(self.hit_box, right_paddle.right_paddle_face_hit_box):
 
                 self.x = right_paddle.face - self.width
 
