@@ -20,10 +20,8 @@ class Paddle:
         self.bottom_y = self.y + self.height
 
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
-
-        self.left_face_hit_box = pygame.Rect(self.x + self.width, self.y, 1, self.height)
-        self.right_face_hit_box = pygame.Rect(self.x, self.y, 1, self.height)
-
+        self.left_paddle_face_hit_box = pygame.Rect(self.x + self.width, self.y, 1, self.height)
+        self.right_paddle_face_hit_box = pygame.Rect(self.x, self.y, 1, self.height)
         self.top_hit_box = pygame.Rect(self.x, self.y, self.width, 1)
         self.bottom_hit_box = pygame.Rect(self.x, self.y + self.height, self.width, 1)
 
@@ -105,7 +103,6 @@ class Ball:
         self.left_boundary = 0
         self.right_boundary = 800
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.i = 0
 
 
     def render(self):
@@ -141,22 +138,20 @@ class Ball:
 
             if pygame.Rect.colliderect(self.hit_box, left_paddle.left_face_hit_box):
 
-                self.i += 1
-                print('collided with left face', self.i)
                 self.x = left_paddle.face + 1
-                self.x_speed *= -1
+
+                if -35 < self.x_speed < 35:
+                    self.x_speed *= -1.1
+                else:
+                    self.x_speed *= -1
 
             elif pygame.Rect.colliderect(self.hit_box, left_paddle.bottom_hit_box):
 
-                self.i += 1
-                print('collided with left bottom', self.i)
                 self.y = left_paddle.bottom_y
                 self.y_speed *= -1
 
             elif pygame.Rect.colliderect(self.hit_box, left_paddle.top_hit_box):
 
-                self.i += 1
-                print('collided with left top', self.i)
                 self.y = left_paddle.y - self.height
                 self.y_speed *= -1
 
@@ -166,33 +161,22 @@ class Ball:
 
             if pygame.Rect.colliderect(self.hit_box, right_paddle.right_face_hit_box):
 
-                self.i += 1
-                print('collided with right face', self.i)
                 self.x = right_paddle.face - self.width
-                self.x_speed *= -1
+
+                if -35 < self.x_speed < 35:
+                    self.x_speed *= -1.1
+                else:
+                    self.x_speed *= -1
 
             elif pygame.Rect.colliderect(self.hit_box, right_paddle.bottom_hit_box):
 
-                self.i += 1
-                print('collided with right bottom', self.i)
                 self.y = right_paddle.bottom_y
                 self.y_speed *= -1
 
             elif pygame.Rect.colliderect(self.hit_box, right_paddle.top_hit_box):
 
-                self.i += 1
-                print('collided with right top', self.i)
                 self.y = right_paddle.y - self.height
                 self.y_speed *= -1
-
-
-
-
-
-
-
-
-
 
 
     def new_speed(self):
@@ -274,7 +258,6 @@ fps = 60
 color = (50, 164, 168)
 width, height = 800, 700
 screen = pygame.display.set_mode((width, height))
-i = 0
 
 ball = Ball()
 ball.new_speed()
@@ -309,4 +292,4 @@ while running:
     pygame.display.flip()
     fpsClock.tick(fps)
 
-    print(ball.y)
+    print(round(ball.x_speed, 2), round(ball.y_speed, 2))
