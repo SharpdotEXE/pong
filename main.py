@@ -13,7 +13,7 @@ class Paddle:
         self.width = 30
         self.height = 64
         self.speed = 2
-        self.color = (52, 235, 195)
+        self.color = (33, 168, 24)
         self.top_boundary = 0
         self.bottom_boundary = 536
         self.face = face
@@ -96,7 +96,7 @@ class Ball:
         self.max_speed = 5
         self.x_speed = random.choice(range(4 * self.max_speed, 8 * self.max_speed)) / 10
         self.y_speed = self.max_speed - self.x_speed
-        self.color = (3, 123, 252)
+        self.color = (33, 168, 24)
         self.top_boundary = 0
         self.bottom_boundary = 568
         self.left_boundary = 0
@@ -206,7 +206,7 @@ class Scoreboard:
         self.x = x
         self.y = y
         self.font = pygame.font.SysFont('Times New Roman', 42)
-        self.color = (0, 0, 0)
+        self.color = (33, 168, 24)
         self.str_score = '0'
         self.int_score = 0
 
@@ -225,8 +225,8 @@ class Scoreboard:
 
 def render_field():
 
-    pygame.draw.line(screen, 'black', (0, 600), (800, 600), 5)  # bottom line
-    pygame.draw.line(screen, 'black', (400, 0), (400, 700), 2)  # mid line
+    pygame.draw.line(screen, (33, 168, 24), (0, 600), (800, 600), 5)  # bottom line
+    pygame.draw.line(screen, (33, 168, 24), (400, 0), (400, 700), 2)  # mid line
 
 
 def check_update_score():
@@ -254,7 +254,7 @@ def check_recenter():
 
 fpsClock = pygame.time.Clock()
 fps = 60
-color = (50, 164, 168)
+color = (0, 0, 0)
 width, height = 800, 700
 screen = pygame.display.set_mode((width, height))
 
